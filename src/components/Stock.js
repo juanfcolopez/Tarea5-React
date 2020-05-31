@@ -3,6 +3,7 @@ import React from 'react';
 // Components
 import { StockOrderBook }  from './StockOrderBook';
 import { StockInfo } from './StockInfo';
+import { TradeChart } from './TradeChart';
 
 const ccxws = require("ccxws");
 
@@ -20,7 +21,8 @@ export class Stock extends React.Component {
                     price: 0,
                     side: 0,
                     time: 0,
-                    amount: ''
+                    amount: '',
+                    data: []
                   };
 
     this.socket = null;
@@ -54,14 +56,17 @@ export class Stock extends React.Component {
         side: trades.side,
         time: trades.unix,
         amount: trades.amount
-
       })
+
+      let tradeObj = {
+        value: trades.price,
+        time: trades.unix / 1000,
+      };
+      this.setState({data: [...this.state.data, tradeObj]});
     })
- 
 
     // handle level2 orderbook snapshots
     this.socket2.on("l2snapshot", snapshot => {
-      console.log(snapshot);
       this.setState({ orderbookAsks: snapshot.asks,
                       orderbookBids: snapshot.bids})
     });
@@ -70,7 +75,10 @@ export class Stock extends React.Component {
     this.socket2.subscribeLevel2Snapshots(market);
     this.socket.subscribeTicker(market);
     this.socket.subscribeTrades(market);
+
+
   }
+  
 
 /*   shouldComponentUpdate(nextProps, nextState) {
     if (nextProps.market.id !== this.props.market.id) {
@@ -89,6 +97,7 @@ export class Stock extends React.Component {
   render() {
     return (
       <div className="Stock">
+        <TradeChart data={this.state.data}/>
          <StockInfo volume={parseInt(this.state.volume)}
                          high={parseInt(this.state.High)}
                          low={parseInt(this.state.Low)}
