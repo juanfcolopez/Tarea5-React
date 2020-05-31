@@ -11,12 +11,12 @@ export class TradeChart extends React.Component {
   }
 
   shouldComponentUpdate(next_props) {
-    this.lineSeries.setData(next_props);
+    this.lineSeries.setData(next_props.data);
     return false;
   }
 
   componentDidMount() {
-    this.chart = createChart(document.getElementsByClassName("TradeChart")[0], {
+    this.chart = createChart(document.getElementById("TradeChart"), {
         width: 600,
         height: 300,
     });
@@ -26,7 +26,7 @@ export class TradeChart extends React.Component {
 
   render() {
     return (
-      <div className="TradeChart">
+      <div id="TradeChart">
       </div>
     );
   }
