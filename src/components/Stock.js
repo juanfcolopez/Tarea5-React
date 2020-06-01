@@ -30,8 +30,12 @@ export class Stock extends React.Component {
   }
 
   componentDidMount() {
+    this.startGettingData(this.props.market);
+  }
+
+  startGettingData(market) {
     // Get previous chart data
-    fetch("https://api.binance.com/api/v3/klines?symbol=BTCUSDT&interval=1h")
+    fetch("https://api.binance.com/api/v3/klines?symbol="+market.id+"&interval=1h")
         .then(res => res.json())
         .then((data) => {
           const candles = data.map((o,i) => { return({  time: o[0],
@@ -42,14 +46,23 @@ export class Stock extends React.Component {
                                                      }); });
           this.setState({ candles: candles });
           // Connect to websocket and retrieve last data
-          this.connectSocket();
+          this.connectSocket(market);
         })
         .catch(console.log)
   }
 
-  connectSocket() {
-    const market = this.props.market;
+  changeStock(newMarket) {
+    this.disconnectSockets();
+    this.startGettingData(newMarket);
+  }
 
+  disconnectSockets() {
+    this.klineStream.close();
+    this.tradeStream.close();
+    this.infoStream.close();
+  }
+
+  connectSocket(market) {
     this.klineStream = new WebSocket("wss://stream.binance.com:9443/ws/"+market.id.toLowerCase()+"@kline_1h");
     this.tradeStream = new WebSocket("wss://stream.binance.com:9443/ws/"+market.id.toLowerCase()+"@aggTrade");
     this.infoStream = new WebSocket("wss://stream.binance.com:9443/ws/"+market.id.toLowerCase()+"@ticker");
@@ -104,30 +117,21 @@ export class Stock extends React.Component {
                             } });
     };
 
-    this.orderBookStream.onmessage = (evt) => {
-      const data = JSON.parse(evt.data);
-
-      console.log(data);
-    };
-
 
 
   }
 
 
-/*   shouldComponentUpdate(nextProps, nextState) {
+  shouldComponentUpdate(nextProps, nextState) {
     if (nextProps.market.id !== this.props.market.id) {
-      this.socket.unsubscribeLevel2Snapshots(this.props.market);
-      this.socket.subscribeLevel2Snapshots(nextProps.market)
-
+      this.changeStock(nextProps.market);
       return true;
     }
-
 
     if (nextState) return true;
 
     return false;
-  } */
+  }
 
   render() {
     return (
