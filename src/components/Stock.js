@@ -41,21 +41,27 @@ export class Stock extends React.Component {
                                                         close: o[4]
                                                      }); });
           this.setState({ candles: candles });
+          // Connect to websocket and retrieve last data
           this.connectSocket();
         })
         .catch(console.log)
-
-    // Connect to websocket and retrieve last data
-
   }
 
   connectSocket() {
     const market = this.props.market;
-    console.log("wss://stream.binance.com:9443/ws/"+market.id.toLowerCase()+"@kline_1h");
 
     this.klineStream = new WebSocket("wss://stream.binance.com:9443/ws/"+market.id.toLowerCase()+"@kline_1h");
     this.tradeStream = new WebSocket("wss://stream.binance.com:9443/ws/"+market.id.toLowerCase()+"@aggTrade");
     this.infoStream = new WebSocket("wss://stream.binance.com:9443/ws/"+market.id.toLowerCase()+"@ticker");
+
+    //this.orderBookStream = new WebSocket("wss://stream.binance.com:9443/ws/"+market.id.toLowerCase()+"@bookTicker");
+    this.socket2 =  new ccxws.binance();
+    this.socket2.on("l2snapshot", snapshot => {
+      this.setState({ orderbookAsks: snapshot.asks,
+                      orderbookBids: snapshot.bids})
+    });
+    // subscribe to level2 orderbook snapshots
+    this.socket2.subscribeLevel2Snapshots(market);
 
 
     this.klineStream.onmessage = (evt) =>  {
@@ -97,6 +103,14 @@ export class Stock extends React.Component {
                               last: Math.round(data.c*100)/100
                             } });
     };
+
+    this.orderBookStream.onmessage = (evt) => {
+      const data = JSON.parse(evt.data);
+
+      console.log(data);
+    };
+
+
 
   }
 
