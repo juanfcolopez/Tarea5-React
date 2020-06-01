@@ -5,7 +5,6 @@ import { Row, Col } from 'reactstrap';
 export class StockInfo extends React.Component {
   constructor(props) {
     super(props);
-    console.log(props.volume);
     this.transactions = [];
   }
   // https://stackoverflow.com/questions/847185/convert-a-unix-timestamp-to-time-in-javascript
@@ -28,15 +27,9 @@ export class StockInfo extends React.Component {
   }
 
   render() {
-    let data = this.props.trade;
-    if (typeof(data) === "undefined") data = [];
-    let transactions = data.map((o) => {return o});
-    this.transactions.push(transactions[0]);
-    this.transactions.sort((a,b) => b.time - a.time );
-
-
+    this.transactions = this.props.trades
     // Information
-  
+
 
     return (
       <Row>
@@ -45,24 +38,24 @@ export class StockInfo extends React.Component {
             <table>
               <tbody>
               <tr>
-                <th>Volume:</th>
-                <td>{this.props.volume}</td>
+                <th>Volume 24hs:</th>
+                <td>{this.props.info.volume}</td>
               </tr>
               <tr>
-                <th>High:</th>
-                <td>{this.props.high}</td>
+                <th>High 24hs:</th>
+                <td>{this.props.info.high}</td>
               </tr>
               <tr>
-                <th>Low:</th>
-                <td>{this.props.low}</td>
+                <th>Low 24hs:</th>
+                <td>{this.props.info.low}</td>
               </tr>
               <tr>
                 <th>Last Price:</th>
-                <td>{this.props.last}</td>
+                <td>{this.props.info.last}</td>
               </tr>
               <tr>
-                <th>Variation:</th>
-                <td>{this.props.variation}%</td>
+                <th>Variation 24hs:</th>
+                <td>{this.props.info.variation}%</td>
               </tr>
               </tbody>
             </table>
