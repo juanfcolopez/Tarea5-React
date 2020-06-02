@@ -86,7 +86,7 @@ export class Stock extends React.Component {
                         low: data.k.l,
                         close: data.k.c
                      }
-       if (this.state.candles.length > 0 && this.state.candles[this.state.candles.length-1].time == candle.time){
+       if (this.state.candles.length > 0 && this.state.candles[this.state.candles.length-1].time === candle.time){
          this.setState({ candles: [...this.state.candles.slice(0, -1), candle] });
        }  else {
          this.setState({ candles: [...this.state.candles, candle] });
