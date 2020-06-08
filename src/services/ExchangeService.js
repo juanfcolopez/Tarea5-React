@@ -2,7 +2,7 @@ import React from 'react';
 
 // Redux
 import { connect } from "react-redux";
-import { addCandle, setCandles, addTrade, setStockInfo, setOrderBook, updateOrderBook } from "../redux/actions";
+import { addCandle, setCandles, addTrade, setStockInfo, setOrderBook, updateOrderBook, setTrades } from "../redux/actions";
 import { getStockShowing } from "../redux/selectors";
 
 class ExchangeService extends React.Component {
@@ -31,9 +31,10 @@ class ExchangeService extends React.Component {
   }
 
   start(ticker) {
-    // Get past data from ticker
+    // Get past data from ticker && reset data
     this.getCandles(ticker);
     this.getOrderBook(ticker);
+    this.props.setTrades([]);
 
     // Connect to ticker websocket updates
     this.connectTradesWebsocket(ticker);
@@ -168,5 +169,5 @@ const mapStateToProps = state => {
 
 export default connect(
   mapStateToProps,
-  { setCandles, addCandle, addTrade, setStockInfo, setOrderBook, updateOrderBook }
+  { setCandles, addCandle, addTrade, setStockInfo, setOrderBook, updateOrderBook, setTrades }
 )(ExchangeService);

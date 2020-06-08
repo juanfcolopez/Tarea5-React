@@ -1,5 +1,11 @@
-import { ADD_TRADE, SET_STOCK, ADD_CANDLE, SET_CANDLES, SET_INFO, SET_ORDERBOOK, UPDATE_ORDERBOOK } from "./actionTypes";
+import { ADD_TRADE, SET_STOCK, ADD_CANDLE, SET_CANDLES, SET_INFO, SET_ORDERBOOK, UPDATE_ORDERBOOK, SET_TRADES } from "./actionTypes";
 
+export const setTrades = trades => ({
+  type: SET_TRADES,
+  payload: {
+    trades: trades
+  }
+});
 
 export const addTrade = trade => ({
   type: ADD_TRADE,
