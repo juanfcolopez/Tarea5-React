@@ -6,26 +6,53 @@ import { addCandle, setCandles, addTrade, setStockInfo, setOrderBook, updateOrde
 import { getStockShowing } from "../redux/selectors";
 
 class ExchangeService extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      stockShowing: "",
+    }
+  }
 
   componentDidMount() {
+    this.setState({ stockShowing: this.props.stockShowing.id });
     this.start(this.props.stockShowing.id);
   }
 
+  shouldComponentUpdate(nextProps) {
+    if (this.state.stockShowing != nextProps.stockShowing.id){
+      this.changeStock(nextProps.stockShowing.id);
+    }
+    return false;
+  }
+
+  changeStock(stock_ticker) {
+    this.setState({ stockShowing: stock_ticker });
+    this.restart(stock_ticker);
+  }
+
   start(ticker) {
+    // Get past data from ticker
     this.getCandles(ticker);
     this.getOrderBook(ticker);
+
+    // Connect to ticker websocket updates
     this.connectTradesWebsocket(ticker);
     this.connectTickerWebsocket(ticker);
     this.connectCandleWebsocket(ticker);
     this.connectOrderBookWebsocket(ticker);
   }
 
-  restart(ticker) {
-    return null;
+  stop() {
+    // Close sockets
+    if (this.tradeStream)  this.tradeStream.close();
+    if (this.infoStream)  this.infoStream.close();
+    if (this.klineStream)  this.klineStream.close();
+    if (this.orderbookStream)  this.orderbookStream.close();
   }
 
-  stop() {
-    return null;
+  restart(ticker) {
+    this.stop();
+    this.start(ticker);
   }
 
   getCandles(ticker) {
@@ -114,9 +141,9 @@ class ExchangeService extends React.Component {
   }
 
   connectOrderBookWebsocket(ticker) {
-    this.tradeStream = new WebSocket("wss://stream.binance.com:9443/ws/"+ticker.toLowerCase()+"@depth");
+    this.orderbookStream = new WebSocket("wss://stream.binance.com:9443/ws/"+ticker.toLowerCase()+"@depth");
 
-    this.tradeStream.onmessage = (evt) => {
+    this.orderbookStream.onmessage = (evt) => {
       const data = JSON.parse(evt.data);
 
       const orderbookUpdate =  {  u: data.u,
@@ -136,7 +163,7 @@ class ExchangeService extends React.Component {
 
 const mapStateToProps = state => {
   const stockShowing = getStockShowing(state);
-  return { stockShowing };
+  return { stockShowing: stockShowing };
 };
 
 export default connect(

@@ -75,7 +75,7 @@ class StockInfo extends React.Component {
                     <tr key={i} className="buyOrder">
                       <td>{this.timeConverter(o.time)}</td>
                       <td>{o.amount}</td>
-                      <td>{parseInt(o.price)}</td>
+                      <td>{Math.round(o.price*100)/100}</td>
                     </tr>
                   );
                 } else {
@@ -83,7 +83,7 @@ class StockInfo extends React.Component {
                     <tr key={i} className="sellOrder">
                       <td>{this.timeConverter(o.time)}</td>
                       <td>{o.amount}</td>
-                      <td>{parseInt(o.price)}</td>
+                      <td>{Math.round(o.price*100)/100}</td>
                     </tr>
                   );
                 }

@@ -17,7 +17,18 @@ class TradeChart extends React.Component {
   }
 
   shouldComponentUpdate(nextProps) {
+    console.log(nextProps.data);
     this.lineSeries.setData(nextProps.data);
+    this.chart.timeScale().applyOptions({ fixLeftEdge: true,
+                                          crosshair: {
+                                            labelVisible: false,
+                                            visible: false,
+                                          },
+                                          timeScale: {
+                                            timeVisible: true,
+                                            visible: false
+                                          },
+                                        });
     return false;
   }
 

@@ -16,3 +16,7 @@
 	border: 1px solid rgba(255, 70, 70, 1);
 	border-radius: 2px;
 }
+
+#TradeChart {
+	margin-bottom: 30px;
+}

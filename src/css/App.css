@@ -47,11 +47,12 @@ body {
   margin-left: 4px;
 }
 
-.row {
-  margin-bottom: 20px;
-}
 
 .stockName {
   color: white;
   text-align: left;
+}
+
+[class*=col-] {
+    margin-bottom: 30px;
 }

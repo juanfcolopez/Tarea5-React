@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from "react-redux";
 
-import './App.css';
+import './css/App.css';
 
 // Components
 import { Container, Row, Col } from 'reactstrap';
