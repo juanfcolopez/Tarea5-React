@@ -5,7 +5,7 @@ import './App.css';
 
 // Components
 import { Container, Row, Col } from 'reactstrap';
-import Stock1  from './components/Stock1';
+import Stock  from './components/Stock';
 import StockList  from './components/StockList';
 import { getStockShowing } from "./redux/selectors";
 //import ClipLoader from "react-spinners/ClipLoader";
@@ -23,7 +23,7 @@ class App extends React.Component {
               </Col>
               <Col xs="12" md="12" lg="9">
                 { (this.props.stockShowing) ?
-                <Stock1 />
+                <Stock />
               :
                 <h4 style={{width:"100%"}}>Select a stock...</h4>
               }
