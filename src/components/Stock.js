@@ -5,28 +5,13 @@ import { StockOrderBook }  from './StockOrderBook';
 import { StockInfo } from './StockInfo';
 import { TradeChart } from './TradeChart';
 
-const ccxws = require("ccxws");
+// Services
+import exchangeService from '../services/exchangeService'
 
 export class Stock extends React.Component {
   constructor(props) {
     super(props);
-
-    this.state =  { orderbookAsks: [],
-                    orderbookBids: [],
-                    info : {
-                      volume: 0,
-                      high: 0,
-                      low: 0,
-                      lastPrice: 0,
-                      variation: 0,
-                      price: 0,
-                      side: 0,
-                      time: 0,
-                      amount: ''
-                    },
-                    trades: [],
-                    candles: []
-                  };
+    this.service = exchangeService
   }
 
   componentDidMount() {
@@ -66,15 +51,6 @@ export class Stock extends React.Component {
     this.klineStream = new WebSocket("wss://stream.binance.com:9443/ws/"+market.id.toLowerCase()+"@kline_1h");
     this.tradeStream = new WebSocket("wss://stream.binance.com:9443/ws/"+market.id.toLowerCase()+"@aggTrade");
     this.infoStream = new WebSocket("wss://stream.binance.com:9443/ws/"+market.id.toLowerCase()+"@ticker");
-
-    //this.orderBookStream = new WebSocket("wss://stream.binance.com:9443/ws/"+market.id.toLowerCase()+"@bookTicker");
-    this.socket2 =  new ccxws.binance();
-    this.socket2.on("l2snapshot", snapshot => {
-      this.setState({ orderbookAsks: snapshot.asks,
-                      orderbookBids: snapshot.bids})
-    });
-    // subscribe to level2 orderbook snapshots
-    this.socket2.subscribeLevel2Snapshots(market);
 
 
     this.klineStream.onmessage = (evt) =>  {

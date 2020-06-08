@@ -1,50 +1,29 @@
 import React from 'react';
-//import logo from './logo.svg';
+import { connect } from "react-redux";
+
 import './App.css';
 
 // Components
 import { Container, Row, Col } from 'reactstrap';
-import { Stock }  from './components/Stock';
-import { StockList }  from './components/StockList';
-//import Switch from 'react-switch';
+import Stock1  from './components/Stock1';
+import StockList  from './components/StockList';
+import { getStockShowing } from "./redux/selectors";
 //import ClipLoader from "react-spinners/ClipLoader";
-
-// Utils
-import markets from './data/markets';
 
 
 class App extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state =  { stockShowing: ""
-                  };
-  }
-
-  onStockClick(event) {
-    // Change chart and current stock info
-    console.log(event.target.getAttribute("stockId"));
-    const stock_id = event.target.getAttribute("stockId");
-    this.updateStock(stock_id);
-  }
-
-  updateStock(stock_id) {
-    this.setState({ stockShowing: stock_id })
-  }
 
   render() {
-
-    const marketsList = Object.values(markets);
     return (
       <div className="App">
           <Container>
             <Row>
               <Col xs="12" md="12" lg="3">
-                <StockList markets={marketsList}
-                           clickAction={this.onStockClick.bind(this)} />
+                <StockList />
               </Col>
               <Col xs="12" md="12" lg="9">
-                { (this.state.stockShowing) ?
-                <Stock market={markets[this.state.stockShowing]}/>
+                { (this.props.stockShowing) ?
+                <Stock1 />
               :
                 <h4 style={{width:"100%"}}>Select a stock...</h4>
               }
@@ -57,4 +36,9 @@ class App extends React.Component {
   }
 }
 
-export default App;
+const mapStateToProps = state => {
+  const stockShowing = getStockShowing(state);
+  return { stockShowing };
+};
+
+export default connect(mapStateToProps)(App);

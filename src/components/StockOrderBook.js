@@ -1,12 +1,16 @@
 import React from 'react';
-import './StockOrderBook.css';
+import '../css/StockOrderBook.css';
 import { Row, Col } from 'reactstrap';
 
-export class StockOrderBook extends React.Component {
+// Redux
+import { connect } from "react-redux";
+import { getOrderBook } from "../redux/selectors";
+
+class StockOrderBook extends React.Component {
 
   render() {
-    let asks = this.props.asks;
-    let bids = this.props.bids;
+    let asks = this.props.asks.slice(0, 15);
+    let bids = this.props.bids.slice(0, 15);
 
     let asksTotalSize = 0;
     let bidsTotalSize = 0;
@@ -68,3 +72,14 @@ export class StockOrderBook extends React.Component {
     );
   }
 }
+
+const mapStateToProps = state => {
+  const orderbook = getOrderBook(state);
+  return { asks: orderbook.asks,
+           bids: orderbook.bids};
+};
+
+export default connect(
+  mapStateToProps,
+  { }
+)(StockOrderBook);

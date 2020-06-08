@@ -1,9 +1,13 @@
 import React from 'react';
-import './TradeChart.css';
+import '../css/TradeChart.css';
 import { createChart } from 'lightweight-charts';
 
+// Redux
+import { connect } from "react-redux";
+import { getCandles } from "../redux/selectors";
 
-export class TradeChart extends React.Component {
+
+class TradeChart extends React.Component {
   constructor(props) {
     super(props);
     this.chart = null;
@@ -12,13 +16,12 @@ export class TradeChart extends React.Component {
     this.chartTooltip = React.createRef();
   }
 
-  shouldComponentUpdate(next_props) {
-    this.lineSeries.setData(next_props.data);
+  shouldComponentUpdate(nextProps) {
+    this.lineSeries.setData(nextProps.data);
     return false;
   }
 
   componentDidMount() {
-
     // Generate chart
     this.chart = createChart(document.getElementById("TradeChart"),
                               { width: 600,
@@ -64,14 +67,7 @@ export class TradeChart extends React.Component {
                                   visible: false,
                                 },
     });
-    // Initialize empty line series
-    //this.lineSeries = this.chart.addLineSeries([]);
-    // this.lineSeries = this.chart.addAreaSeries({
-    // 	topColor: 'rgba(38,198,218, 0.56)',
-    // 	bottomColor: 'rgba(38,198,218, 0.04)',
-    // 	lineColor: 'rgba(38,198,218, 1)',
-    // 	lineWidth: 2,
-    // });
+
     this.lineSeries = this.chart.addCandlestickSeries();
     this.chart.timeScale().applyOptions({ fixLeftEdge: true,
                                           crosshair: {
@@ -108,10 +104,6 @@ export class TradeChart extends React.Component {
 
     	tooltip.style.display = 'block';
     	var candle = param.seriesPrices.get(this.lineSeries);
-
-    	//tooltip.innerHTML = '<div style="color: rgba(255, 70, 70, 1)">Apple Inc.</div>' +
-    	//	'<div style="font-size: 24px; margin: 4px 0px">' + Math.round(price * 100) / 100 + '</div>' +
-    	//	'<div>' + dateStr + '</div>';
 
     	tooltip.innerHTML = '<div style="font-size: 8px; margin: 4px 0px"> o: '+Math.round(candle.open)+' - h: '+Math.round(candle.high)+' - l: '+Math.round(candle.low)+' - c: '+Math.round(candle.close)+'</div>' +
     		'<div>' + dateStr + '</div>';
@@ -159,3 +151,13 @@ export class TradeChart extends React.Component {
     );
   }
 }
+
+const mapStateToProps = state => {
+  const candles = getCandles(state);
+  return { data: candles };
+};
+
+export default connect(
+  mapStateToProps,
+  { }
+)(TradeChart);

@@ -1,12 +1,18 @@
 import React from 'react';
-import './StockInfo.css';
+import '../css/StockInfo.css';
 import { Row, Col } from 'reactstrap';
 
-export class StockInfo extends React.Component {
+// Redux
+import { connect } from "react-redux";
+import { getTrades, getStockInfo } from "../redux/selectors";
+
+class StockInfo extends React.Component {
   constructor(props) {
     super(props);
+    console.log(props);
     this.transactions = [];
   }
+
   // https://stackoverflow.com/questions/847185/convert-a-unix-timestamp-to-time-in-javascript
   timeConverter(UNIX_timestamp){
     const a = new Date(UNIX_timestamp);
@@ -22,10 +28,6 @@ export class StockInfo extends React.Component {
   }
 
   render() {
-    this.transactions = this.props.trades
-    // Information
-
-
     return (
       <Row>
         <Col xs="12" md="12" lg="6">
@@ -67,7 +69,7 @@ export class StockInfo extends React.Component {
               </tr>
             </thead>
             <tbody>
-            { this.transactions.map((o, i) => {
+            { this.props.trades.map((o, i) => {
                 if (o.side === "buy") {
                   return (
                     <tr key={i} className="buyOrder">
@@ -97,3 +99,15 @@ export class StockInfo extends React.Component {
     );
   }
 }
+
+const mapStateToProps = state => {
+  const info = getStockInfo(state);
+  const trades = getTrades(state);
+  return { info: info,
+           trades: trades};
+};
+
+export default connect(
+  mapStateToProps,
+  { }
+)(StockInfo);

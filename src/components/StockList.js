@@ -1,15 +1,34 @@
 import React from 'react';
 
-import './StockList.css';
+import '../css/StockList.css';
+import { connect } from "react-redux";
+import { setStock } from "../redux/actions";
 
-export class StockList extends React.Component {
+import marketsDict from '../data/markets';
+
+class StockList extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      stockShowing: "",
+    }
+    this.handleClickStock = this.handleClickStock.bind(this);
+  }
+
+  handleClickStock(event) {
+    this.setState({ stockShowing: event.target.getAttribute("stockId") });
+    console.log(this.state.stockShowing);
+    this.props.setStock(marketsDict[event.target.getAttribute("stockId")]);
+  }
+
   render() {
+    const markets = Object.values(marketsDict);
     return (
       <div className="StockList">
         <ul>
-        { this.props.markets.map((o, i) =>
+        { markets.map((o, i) =>
             <li key={i}
-                onClick={this.props.clickAction}
+                onClick={this.handleClickStock}
                 stockId={o.id} >
               {o.id}
             </li>
@@ -20,3 +39,8 @@ export class StockList extends React.Component {
     );
   }
 }
+
+export default connect(
+  null,
+  { setStock }
+)(StockList);
