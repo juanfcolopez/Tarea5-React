@@ -29,7 +29,8 @@ class StockList extends React.Component {
         { markets.map((o, i) =>
             <li key={i}
                 onClick={this.handleClickStock}
-                stockId={o.id} >
+                stockId={o.id}
+                className={this.state.stockShowing === o.id? "selected":"unselected"}>
               {o.id}
             </li>
           )
