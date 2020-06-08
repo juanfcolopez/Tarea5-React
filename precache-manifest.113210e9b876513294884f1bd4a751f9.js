@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "658849beba5433d61e5ca6c03b9d5fbc",
+    "revision": "774c532c24d6f9ad0ca70d2000681823",
     "url": "/Tarea5-React/index.html"
   },
   {
@@ -8,7 +8,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/Tarea5-React/static/css/2.af3c1da9.chunk.css"
   },
   {
-    "revision": "926c18f04aca0b9e9030",
+    "revision": "00928f6596d3b72449eb",
     "url": "/Tarea5-React/static/css/main.ca5eb09c.chunk.css"
   },
   {
@@ -20,8 +20,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/Tarea5-React/static/js/2.0eaef521.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "926c18f04aca0b9e9030",
-    "url": "/Tarea5-React/static/js/main.614a57e6.chunk.js"
+    "revision": "00928f6596d3b72449eb",
+    "url": "/Tarea5-React/static/js/main.d023273b.chunk.js"
   },
   {
     "revision": "c4d58c0db8d658a4a66a",
